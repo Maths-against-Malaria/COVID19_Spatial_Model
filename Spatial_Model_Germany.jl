@@ -261,15 +261,15 @@ conttime = copy([0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14,
 ## Contact reduction per break point for Home, Others, School, Work
 ## NN x 6 matrix with amount of contacts being reduced Home, Home_old (oldest age group), Others, Others_old (Oldest age group), School, Work at various time points
 
-ContRed = [ 0.35  0.05  0.95  0.20  0.95  0.70;     #t1: Apr. 03, 2020 - First lockdown
-            0.15  0.05  0.60  0.20  0.75  0.50;    #t2: May  20, 2020 - Relexation
-            0.00  0.00  0.40  0.10  1.00  0.20;    #t3: Jun. 01, 2020 - summer vacations
-            0.10  0.00  0.50  0.10  0.50  0.40;    #t4: Aug. 13, 2020 - end summer vctations
-            0.15  0.05  0.70  0.20  0.75  0.50;    #t5: Sept. 02, 2020 - week measures
-            0.33  0.30  0.80  0.70  1.00  0.75;    #t6: Oct. 27, 2020 - soft lockdown
-            0.35  0.30  0.80  0.75  1.00  0.75;    #t7: Dec. 01, 2020 - hard christmas lockdown
-            0.30  0.35  0.95  0.75  1.00  0.85;    #t8: Dec. 24, 2020
-            0.25  0.20  0.75  0.60  0.75  0.60;    #t9: Feb. 14, 2021
+ContRed = [ 0.35  0.05  0.95  0.20  0.95  0.70;    #t1:  Apr. 03, 2020 - First lockdown
+            0.15  0.05  0.60  0.20  0.75  0.50;    #t2:  May  20, 2020 - Relexation
+            0.00  0.00  0.40  0.10  1.00  0.20;    #t3:  Jun. 01, 2020 - summer vacations
+            0.10  0.00  0.50  0.10  0.50  0.40;    #t4:  Aug. 13, 2020 - end summer vctations
+            0.15  0.05  0.70  0.20  0.75  0.50;    #t5:  Sep. 02, 2020 - week measures
+            0.33  0.30  0.80  0.70  1.00  0.75;    #t6:  Oct. 27, 2020 - soft lockdown
+            0.35  0.30  0.80  0.75  1.00  0.75;    #t7:  Dec. 01, 2020 - hard christmas lockdown
+            0.30  0.35  0.95  0.75  1.00  0.85;    #t8:  Dec. 24, 2020
+            0.25  0.20  0.75  0.60  0.75  0.60;    #t9:  Feb. 14, 2021
             0.00  0.00  0.00  0.00  0.00  0.00;    #t10: Apr. 25, 2021 - emergency break
             0.10  0.05  0.40  0.25  0.50  0.20;    #t11: Jun. 29, 2021 - End emergency break
             0.30  0.15  0.85  0.40  0.75  0.65;    #t12: Aug. 23, 2021 - 3G rule (Schleswig Holstein)
@@ -486,8 +486,6 @@ for l = 1:r
     IndE1Uam[1:s,1:M,l] = hcat(zeros(Int64, s,1), accumulate(+,nEPIL .*(2*(V+1)).+2,dims=2))[:,1:M] .+ Erl1 .+ (l-1)*Erl[s+1]
 end
 
-#Index of states E1Uaml
-
 # Arrays of transition rates for (U) compartments
 rates = Array{Union{Missing, Any}}(missing, s, M)
 for a = 1:s
@@ -500,7 +498,7 @@ for a = 1:s
     end
 end
 
-# Next Generation matrix
+# Next generation matrix
 cPIL = Array{Union{Missing, Any}}(missing, s, M)
 for a = 1:s
     for m = 1:M
@@ -721,7 +719,6 @@ plam = [INDInf]                                                # Parameters for 
 Idx_Incd = IndRInf[s,M,r]+1
 p = [IND, RATES, pars, [Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop, tEB2, tEBstop2], INDInf, lamexmat, thres, Idx_Incd, r, X, N, Incid_Trig, tschool, mutint,[pPmv,pImv,pLmv]]
 
-
 ##########################################################################
 ###### Main functions force of infection + implementation of ODE system
 ##########################################################################
@@ -833,7 +830,6 @@ function lambda(u,INDInf,Qmax,fiso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamexmat
      else
          t1=t
      end
-
      lam = lam .* (1+Amp*cos(2*pi*(t1-tR0max)/365)) .+ (lamex)
 end
 
@@ -976,13 +972,13 @@ end
 ###### Solving the IVP
 ###############################################################
 
-u0=fill(0.,IndRInf[s,M,r]+1+r)
+u0 = fill(0.,IndRInf[s,M,r]+1+r)
 
 for l=1:r
-    for a= 1:s
-        u0[IndSU[a,l]] =max(propvax[l][a]*(PopSize[l,a]-ininf[l][a]),0.)
-        u0[IndE1Uam[a,1,l]+nE[a,1]+nP[a,1]] =  ininf[l][a]
-        u0[IndSU[a,l]+3*V+1] =(1-propvax[l][a])*(PopSize[l,a]-ininf[l][a])
+    for a = 1:s
+        u0[IndSU[a,l]] = max(propvax[l][a]*(PopSize[l,a]-ininf[l][a]),0.)
+        u0[IndE1Uam[a,1,l]+nE[a,1]+nP[a,1]] = ininf[l][a]
+        u0[IndSU[a,l]+3*V+1] = (1-propvax[l][a])*(PopSize[l,a]-ininf[l][a])
     end
 end
 
@@ -991,10 +987,10 @@ end
 cb = DiscreteCallback(integer_time_values_condition, contact_reduction_affect!)
 
 # Setting up the ODE problrm for the solver
-prob=ODEProblem(spatialmodel,u0,tspan,p,callback=cb)
+prob = ODEProblem(spatialmodel,u0,tspan,p,callback=cb)
 
 # Solving the ODE system
-sol=solve(prob, VCABM(), tstops=thres)
+sol = solve(prob, VCABM(), tstops=thres)
 
 ##########################################################################
 ###### Post processing solutions to plot the dynamics of all compartments
@@ -1005,7 +1001,7 @@ function sumsus(u)
         sumSus=zeros(4)
         for l =1:r  # cummulative infections per location and age group
            for a=1:s
-               sumSus=sumSus .+ [u[IndSU[a,l]],  sum(u[(IndSU[a,l]+1):(IndSU[a,l]+V)]) , sum(u[(IndSU[a,l]+V+1):(IndSU[a,l]+3*V)]), u[IndSU[a,l]+3*V+1]]
+               sumSus=sumSus .+[u[IndSU[a,l]], sum(u[(IndSU[a,l]+1):(IndSU[a,l]+V)]), sum(u[(IndSU[a,l]+V+1):(IndSU[a,l]+3*V)]), u[IndSU[a,l]+3*V+1]]
            end
         end
         sumSus
@@ -1013,12 +1009,12 @@ end
 
 # Total number of infected individuals
 function suminf(u)
-        sumInf=zeros(M)
-        for l =1:r  # cummulative infections per location and age group
-           for a=1:s
-               for m=1:M
-                   for v=1:2*(V+1)
-                       sumInf[m]=sumInf[m] + sum(u[INDvec[l][a][m][v][1]])
+        sumInf = zeros(M)
+        for l = 1:r  # cummulative infections per location and age group
+           for a = 1:s
+               for m = 1:M
+                   for v = 1:2*(V+1)
+                       sumInf[m] = sumInf[m] + sum(u[INDvec[l][a][m][v][1]])
                    end
                end
            end
@@ -1028,12 +1024,12 @@ end
 
 # Age-stratified number of infected individuals
 function suminfage(u)
-    sumInf=zeros(s)
-    for l =1:r  # cummulative infections per location and age group
-       for m=1:M
-           for a=1:s
-               for v=1:2*(V+1)
-                   sumInf[a]=sumInf[a] + sum(u[INDvec[l][a][m][v][1]])
+    sumInf = zeros(s)
+    for l = 1:r  # cummulative infections per location and age group
+       for m = 1:M
+           for a = 1:s
+               for v = 1:2*(V+1)
+                   sumInf[a] = sumInf[a] + sum(u[INDvec[l][a][m][v][1]])
                end
            end
        end
@@ -1043,12 +1039,12 @@ end
 
 # Variant-stratified number of infected individuals
 function suminfvar(u)
-    sumInf=zeros(M)
-    for l =1:r  # cummulative infections per location and age group
-       for a=1:s
-           for m=1:M
-               for v=1:2*(V+1)
-                   sumInf[m]=sumInf[m] + sum(u[INDvec[l][a][m][v][1]])
+    sumInf = zeros(M)
+    for l = 1:r  # cummulative infections per location and age group
+       for a = 1:s
+           for m = 1:M
+               for v = 1:2*(V+1)
+                   sumInf[m] = sumInf[m] + sum(u[INDvec[l][a][m][v][1]])
                end
            end
        end
@@ -1058,7 +1054,7 @@ end
 
 # Total number of dead individuals
 function sumdead(u)
-        sumdead=0
+        sumdead = 0
         for l =1:r  # cummulative infections per location and age group
            for a=1:s
                for m=1:M
@@ -1071,11 +1067,11 @@ end
 
 # Age-stratified number of dead individuals
 function sumdeadage(u)
-    sumdead=zeros(s)
-    for l =1:r  # cummulative infections per location and age group
-       for a=1:s
-           for m=1:M
-               sumdead[a] =  sumdead[a] + u[IndRInf[a,m,l]+1]
+    sumdead = zeros(s)
+    for l = 1:r  # cummulative infections per location and age group
+       for a = 1:s
+           for m = 1:M
+               sumdead[a] = sumdead[a] + u[IndRInf[a,m,l]+1]
            end
        end
     end
@@ -1085,10 +1081,10 @@ end
 # Age-stratified number of recovered individuals
 function sumrecage(u)
     sumrec=zeros(s)
-    for l =1:r  # cummulative infections per location and age group
-       for a=1:s
-           for m=1:M
-               sumrec[a] =  sumrec[a] + u[IndRInf[a,m,l]]
+    for l = 1:r  # cummulative infections per location and age group
+       for a = 1:s
+           for m = 1:M
+               sumrec[a] = sumrec[a] + u[IndRInf[a,m,l]]
            end
        end
     end
@@ -1097,11 +1093,11 @@ end
 
 # Variant-stratified number of dead individuals
 function sumdeadvar(u)
-    sumdead=zeros(M)
-    for l =1:r  # cummulative infections per location and age group
-       for a=1:s
-           for m=1:M
-               sumdead[m] =  sumdead[m] + u[IndRInf[a,m,l]+1]
+    sumdead = zeros(M)
+    for l = 1:r  # cummulative infections per location and age group
+       for a = 1:s
+           for m = 1:M
+               sumdead[m] = sumdead[m] + u[IndRInf[a,m,l]+1]
            end
        end
     end
@@ -1115,17 +1111,13 @@ function vacc(u,p,t)
     N, g, h, R0new, Amp, tR0max = p[3]
     Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop = p[4]
     INDInf = p[5]
-
-    # Defining contact reduction at time t
-    X = p[10]  # Xmat[sum(conttime .< t)+1]
+    X = p[10] 
     mutint = p[14]
-    pPmv,pImv,pLmv = p[15]  ## effect of partial immunization on contagiousness
-    ### Define vrates from vaxrates here
+    pPmv,pImv,pLmv = p[15]
+           
     vrates = vaxrates[sum(vaxtime .< t)+1]
-
-    du= Array{Union{Missing, Any}}(missing, V*s*r)
+    du = Array{Union{Missing, Any}}(missing, V*s*r)
     for l = 1:r
-        #du[IndRIm[s,M,r]+1+l] = 0
         u[IndRIm[s,M,r]+1+l] = 0
         for a = 1:s
             for v = 1:V
@@ -1137,20 +1129,16 @@ function vacc(u,p,t)
                 pick = INDvec[l][a][m]
                 RIm = zeros(nEPIL[a,m])
                 for v in 2:(V+1)
-
                     du[V*s*(l-1)+V*(a-1)+v-1] +=  sum(vrates[a,l,v-1] .* u[pick[v][2]] ) # E2(V) .. L_nL(V)
-
                 end
-
             end
         end
     end
-
     du
 end
 
 tmx = tmax
-ttt=size(sol.u,1)
+ttt = size(sol.u,1)
 
 outInf=fill(0.,(ttt,M))
 outInfAgeAll=fill(0.,(ttt,s))
@@ -1231,7 +1219,7 @@ for t in 1:(tmx)
         outDead1[t] = outDead[k2]
 end
 
-# 7-days average of new infetions#  incidence
+# 7-days average of new infetions incidence
 for t in 1:tmx
         if t>7
             outInc2[t,1] = sum(outInc1[(t-7):t,1])/7
@@ -1244,7 +1232,6 @@ for t in 1:tmx
         end
 end
 
-sum(sol.t .<= 10)
 for t in 1:tmx
         k = sum(sol.t .<= t)
         outInf[t] = outInfAll[k]
@@ -1259,12 +1246,11 @@ for t in 1:tmx
     outdeadVar[t,:] = outDeadVarAll[k,:]
 end
 
-ttt=size(sol.u,1)
-
+ttt = size(sol.u,1)
 deltat = sol.t[2:ttt]-sol.t[1:(ttt-1)]
 
 for k = 1:size(sol.u,1)
-        outVacc[k,:] = vacc(sol.u[k],p,sol.t[k])
+    outVacc[k,:] = vacc(sol.u[k],p,sol.t[k])
 end
 
 for a = 1:s
@@ -1274,8 +1260,7 @@ for a = 1:s
     outVaccAge[:,a] =  sum(outVaccCum[:,((a-1)*V+1):a*V], dims=2)
 end
 
-outVaccAll=sum(outVaccAge,dims=2)
-
+outVaccAll = sum(outVaccAge,dims=2)
 for t in 1:tmx
     k = sum(sol.t .<= t)
     outVac[t] = outVaccAll[k]
@@ -1293,10 +1278,10 @@ end
 out1 = hcat(outt, outInc2, outInf, outDead1, outVac, outInfAge, outInfVar, outdeadAge, outdeadVar, outVacAge)
 out = DataFrame(Tables.table(out1))
 
-# Enter path where the dataframe should be saved (replace foo/ by the path to the location you want to save)
+# Enter path where the dataframe should be saved (replace "foo/" by the path to the location you want to save)
 path = "foo/"
 
-# Enter name of the saved file (replace test by the name you want your file to have)
+# Enter name of the saved file (replace "test" by the name you want your file to have)
 namefile = "test"
 
 # Save the file in the .txt format
