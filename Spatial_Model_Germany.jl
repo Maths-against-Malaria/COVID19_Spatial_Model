@@ -67,7 +67,7 @@ mutint = [-20 290 475]
 ## Fraction of sick individuals per age group (row) and viral variant (col) sxM Matrix
 fsick = [0.15 0.15 0.15; 0.30 0.30 0.30; 0.65 0.65 0.65; 0.70 0.70 0.70] 
 
-
+## Fraction of partially immunized sick individuals per age group (row) and viral variant (col) sxM Matrix
 fsickPI = [[0.10 0.11 0.10; 0.11 0.12 0.11; 0.12 0.13 0.12 ],
            [0.25 0.22 0.25; 0.26 0.23 0.26; 0.27 0.24 0.27 ],
            [0.55 0.60 0.55; 0.56 0.61 0.56; 0.57 0.62 0.57 ],
@@ -1271,9 +1271,19 @@ for t in 1:tmx
     outVacAge[t,:] = outVaccAge[k,:]
 end
 
-######################################
-###### Saving the data as a dataframe 
-######################################
+############################################################################
+###### Saving the outputs as a dataframe 
+######
+###### outt:       Time points
+###### outInc2l1:  7-day average incidence in location l1
+###### outdead:    Number of dead individuals
+###### outVac:     Number of vaccinated individuals
+###### outInfAge:  Number of infections per age group
+###### outInfVar:  Number of infections per viral virant
+###### outdeadAge: Number of dead individuals per age
+###### outdeadVar: Number of dead individuals per viral variant
+###### outVacAge:  Number of vaccinated individuals per age group
+############################################################################
 
 out1 = hcat(outt, outInc2, outInf, outDead1, outVac, outInfAge, outInfVar, outdeadAge, outdeadVar, outVacAge)
 out = DataFrame(Tables.table(out1))
