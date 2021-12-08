@@ -88,7 +88,7 @@ fsickdead = fsick .* fdead
 # Fraction of partially immunized sick individuals that die per age group
 fsickdeadPI = fsickPI
 for a = 1:s
-    fsickdeadPI[a] = fsickPI[a] .* fdead[a]
+    fsickdeadPI[a] = fsickPI[a] .* fdeadPI[a]
 end
 
 # Vaccination onset
