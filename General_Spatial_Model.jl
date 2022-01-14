@@ -271,7 +271,7 @@ ContRedl2 = [0.25  0.05  0.80  0.20  0.90  0.75;  #t1:   Apr. 01, 2020 - First l
 Incid_Trig = [10.0, 50.0, 100.0, 180.0]
 
 ## Incidence based contact reductions for emergency break ((NN1+1) x 6 matrix)
-ContRedInd = [ 0.00  0.00  0.50  0.10  0.25  0.30;
+ContRedIndl1 = [ 0.00  0.00  0.50  0.10  0.25  0.30;
                0.25  0.05  0.60  0.20  0.50  0.55;
                0.30  0.10  0.85  0.60  0.75  0.65;
                0.40  0.20  0.95  0.75  0.75  0.85;
