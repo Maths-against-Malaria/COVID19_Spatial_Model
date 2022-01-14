@@ -7,11 +7,12 @@ General model: Model parameterized for one location (Germany)
 =#
 
 using Pkg
-using Plots
-using DifferentialEquations
-using LinearAlgebra
-using CSV
-using DataFrames
+using Plots   ### if not instaled run: import Pkg; Pkg.add("Plots")
+using DifferentialEquations ### if not instaled run: import Pkg; Pkg.add("DifferentialEquations")
+using LinearAlgebra   ### if not instaled run: import Pkg; Pkg.add("LinearAlgebra")
+using CSV  ### if not instaled run: import Pkg; Pkg.add("CSV")
+using DataFrames  ### if not instaled run: import Pkg; Pkg.add("DataFrames")
+
 
 # Simulation time
 tmax = 850
