@@ -353,7 +353,7 @@ XWork = [[0.0                    0.0                0.0                1.6932158
 redu=[vcat([0 0 0 0 0 0],ContRedl1,[0 0 0 0 0 0]),vcat([0 0 0 0 0 0],ContRedl2,[0 0 0 0 0 0])]
 
 ## Fraction of contacts reduced during emergency break at home, others, school, work at each breaking point
-reduinz=[ContRedIndl1,ContRedIndl1]
+reduinz=[ContRedIndl1,ContRedIndl2]
 
 # General contact reduction
 ## Proportion of the population per location moving to work at given location
