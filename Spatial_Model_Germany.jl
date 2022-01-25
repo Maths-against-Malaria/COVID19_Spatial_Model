@@ -3,7 +3,7 @@ General model: Model parameterized for one location (Germany)
 - Julia version: 1.6.3
 - Authors: Kristan A. Schneider, H. Christian T. Obama, Nessma Adil M. Y., Pierre M. Ngougoue N.,
 - Date created: 2021-09-06
-- Date last modified: 2022-01-14
+- Date last modified: 2022-01-25
 =#
 
 using Pkg
