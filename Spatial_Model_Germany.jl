@@ -490,6 +490,7 @@ end
 # Arrays of transition rates for (U) compartments
 rates = Array{Union{Missing, Any}}(missing, s, M)
 for a = 1:s
+    local delta
     for m = 1:M
         eps1 = nE[a,m] .*repeat([1/DE[a,m]],nE[a,m])
         phi = nP[a,m] .*repeat([1/DP[a,m]],nP[a,m])
@@ -554,6 +555,8 @@ vaxtime =unique(sort(collect(vcat(vaxtime1,tvaxchange))))
 T = length(vaxtime)
 vaxrates = Array{Union{Missing, Any}}(missing, T+1)
 for t = 1:(T)
+    global tmp3
+    global tmp4
     tmp1 = map(x -> x .< vaxtime[t], tvax)
     idx_Dvax = sum(tvaxchange .< vaxtime[t])+1
     Dvax = Dvaxlist[idx_Dvax]
@@ -707,7 +710,7 @@ for m = 1:M
 end
 
 # Death rate
-delta = nL ./DL
+global delta = nL ./DL
 
 ## Store model parameters
 IND = [IndSU, IndE1Uam, IndE1, nEPIL, INDvec, IndLnL, IndRInf] # Indices for unvaccinated Susceptibles, Latents...
@@ -1198,8 +1201,9 @@ outRecAge=fill(0.,tmx,s)
 outdeadVar=fill(0.,tmx,M)
 
 # Numerical integration of incidence
-k1 = 1
+global k1 = 1
 for t in 1:(tmx)
+    global k1
         k2 = sum(sol.t .<=t)
         inc=0.
         inc += sum((sol.t[(k1+1):k2] .-sol.t[k1:(k2-1)]) .* outInc[(k1+1):k2])
