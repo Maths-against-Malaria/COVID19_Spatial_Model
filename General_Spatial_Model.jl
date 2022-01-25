@@ -7,11 +7,11 @@ General model: Model parameterized for two locations (Schleswig-Holstein & Saxon
 =#
 
 using Pkg
-using Plots   ### if not instaled run: import Pkg; Pkg.add("Plots")
-using DifferentialEquations ### if not instaled run: import Pkg; Pkg.add("DifferentialEquations")
-using LinearAlgebra   ### if not instaled run: import Pkg; Pkg.add("LinearAlgebra")
-using CSV  ### if not instaled run: import Pkg; Pkg.add("CSV")
-using DataFrames  ### if not instaled run: import Pkg; Pkg.add("DataFrames")
+using Plots                    ### if not instaled run: import Pkg; Pkg.add("Plots")
+using DifferentialEquations    ### if not instaled run: import Pkg; Pkg.add("DifferentialEquations")
+using LinearAlgebra            ### if not instaled run: import Pkg; Pkg.add("LinearAlgebra")
+using CSV                      ### if not instaled run: import Pkg; Pkg.add("CSV")
+using DataFrames               ### if not instaled run: import Pkg; Pkg.add("DataFrames")
 
 
 # Simulation time
@@ -519,6 +519,7 @@ end
 # Arrays of transition rates for (U) compartments
 rates = Array{Union{Missing, Any}}(missing, s, M)
 for a = 1:s
+    local delta
     for m = 1:M
         eps1 = nE[a,m] .*repeat([1/DE[a,m]],nE[a,m])
         phi = nP[a,m] .*repeat([1/DP[a,m]],nP[a,m])
@@ -586,6 +587,8 @@ T = length(vaxtime)
 vaxrates = Array{Union{Missing, Any}}(missing, T+1)
 
 for t = 1:(T)
+    global tmp3
+    global tmp4
     tmp1 = map(x -> x .< vaxtime[t], tvax)
     idx_Dvax = sum(tvaxchange .< vaxtime[t])+1
     Dvax = Dvaxlist[idx_Dvax]
@@ -740,7 +743,7 @@ for m = 1:M
 end
 
 # Death rates
-delta = nL ./DL
+global delta = nL ./DL
 
 ## Store model parameters
 IND = [IndSU, IndE1Uam, IndE1, nEPIL, INDvec, IndLnL, IndRInf] # Indices for unvaccinated Susceptibles, Latents...
@@ -872,6 +875,7 @@ end
 
 ## Model - differential equations
 function spatialmodel(du,u,p,t)
+    local delta
     IndSU, IndE1Uam, IndE1U, nEPIL, INDvec, IndLnL, IndRInf = p[1]
     rates,  alpha, vaxrates, vaxtime, fratesS, frates, fE1, fsickdead, delta, betaP, betaI, betaL = p[2]
     N, g, h, R0new, Amp, tR0max = p[3]
@@ -1141,6 +1145,7 @@ end
 
 # Number of vaccinated individuals
 function vacc(u,p,t)
+    local delta
     IndSU, IndE1Uam, IndE1U, nEPIL, INDvec, IndLnL, IndRIm = p[1]
     rates,  alpha, vaxrates, vaxtime, fratesS, frates, fE1, fsickdead, delta, betaP, betaI, betaL = p[2]
 
@@ -1229,8 +1234,9 @@ outRecAge=fill(0.,tmx,r,s)
 outdeadVar=fill(0.,tmx,r,M)
 
 # Numerical integration of incidence
-k1 = 1
+global k1 = 1
 for t in 1:(tmx)
+    global k1
     k2 = sum(sol.t .<=t)
     inc=0.
     inc += sum((sol.t[(k1+1):k2] .-sol.t[k1:(k2-1)]) .* outInc[(k1+1):k2])
@@ -1286,6 +1292,7 @@ deltat = sol.t[2:ttt]-sol.t[1:(ttt-1)]
 for k = 1:size(sol.u,1)
     outVacc[k,:,:] = vacc(sol.u[k],p,sol.t[k])
 end
+
 for l = 1:r
     for a = 1:s
         for v=1:V
@@ -1326,11 +1333,13 @@ outl2=hcat(outt,outInc2l2,outInf[:,2],outdead[:,2],outVac[:,2],outInfAge[:,2,:],
 out1 = vcat(outl1, outl2)
 out= DataFrame(Tables.table(out1))
 
+plot(outt, outInfAge)
+
 # Enter path where the dataframe should be saved (replace foo/ by the path to the location you want to save)
-path = "foo/"
+#path = "foo/"
 
 # Enter name of the saved file (replace test by the name you want your file to have)
-namefile = "test"
+#namefile = "test"
 
 # Save the file in the .txt format
-CSV.write(path*namefile*".txt", out, header=false, append=false)
+#CSV.write(path*namefile*".txt", out, header=false, append=false)
