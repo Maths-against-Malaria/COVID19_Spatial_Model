@@ -3,7 +3,7 @@ General model: Model parameterized for two locations (Schleswig-Holstein & Saxon
 - Julia version: 1.6.1
 - Authors: Kristan A. Schneider, H. Christian T. Obama, Nessma Adil M. Y.
 - Date created: 2021-09-06
-- Date last modified: 2022-01-14
+- Date last modified: 2022-01-25
 =#
 
 using Pkg
@@ -1333,13 +1333,11 @@ outl2=hcat(outt,outInc2l2,outInf[:,2],outdead[:,2],outVac[:,2],outInfAge[:,2,:],
 out1 = vcat(outl1, outl2)
 out= DataFrame(Tables.table(out1))
 
-plot(outt, outInfAge)
-
 # Enter path where the dataframe should be saved (replace foo/ by the path to the location you want to save)
-#path = "foo/"
+path = "foo/"
 
 # Enter name of the saved file (replace test by the name you want your file to have)
-#namefile = "test"
+namefile = "test"
 
 # Save the file in the .txt format
-#CSV.write(path*namefile*".txt", out, header=false, append=false)
+CSV.write(path*namefile*".txt", out, header=false, append=false)
