@@ -3,7 +3,7 @@ General model: Model parameterized for two locations (Schleswig-Holstein & Saxon
 - Julia version: 1.6.1
 - Authors: Kristan A. Schneider, H. Christian T. Obama, Nessma Adil M. Y.
 - Date created: 2021-09-06
-- Date last modified: 2022-01-25
+- Date last modified: 2022-02-09
 =#
 
 using Pkg
@@ -450,7 +450,6 @@ for t = 1:inctr^r   ## no school
     XmatNoSch[t] = Contmat
 end
 
-
 ###############################################################
 ###### Derived parameters
 ###############################################################
@@ -754,7 +753,7 @@ thres = 1:1.:tmax                                              # Callback incide
 pars = [N, g, h, R0new,  Amp, tR0max]
 plam = [INDInf]                                                # Parameters for the force of infection
 Idx_Incd = IndRInf[s,M,r]+1
-p = [IND, RATES, pars, [Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop, tEB2, tEBstop2], INDInf, lamexmat, thres, Idx_Incd, r, X, N, Incid_Trig, tschool, mutint,[pPmv,pImv,pLmv]]
+p = [IND, RATES, pars, [Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop, tEB2, tEBstop2], INDInf, lamexmat, thres, Idx_Incd, r, X, N, Incid_Trig, tschool, mutint,[pPmv,pImv,pLmv], PopSize]
 
 
 ##########################################################################
@@ -764,7 +763,6 @@ p = [IND, RATES, pars, [Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop, tEB2, t
 ## The force of infection
 function lambda(u,INDInf,Qmax,fiso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamexmat,t,mutint,pPmv,pImv,pLmv, mutinttimes)
 
-    #INDvecP1, INDvecI1, INDvecL1 = INDInf
     EffInf=Array{Float32}(undef, (r*s,M)) # Effective number of infectious individuals per location age group and mutation
 
     PsumU=Array{Float32}(undef, (r,s,M)) # Sum of the infective prodromal individuals
@@ -977,6 +975,7 @@ function contact_reduction_affect!(integrator)
     tEBstop   = integrator.p[4][6]
     tEBstop2  = integrator.p[4][7] 
     tEBstop2  = integrator.p[4][8]
+    totPopSize = sum(integrator.p[16], dims=2)
     if !(tEB <= Cur_t <= tEBstop || tEB2 <= Cur_t <= tEBstop2)
         xmatr1 = xmatr[1]
         integrator.p[10] = xmatr1[sum(xmatr[4] .<= Cur_t)]
@@ -999,7 +998,7 @@ function contact_reduction_affect!(integrator)
                 out[i] =(Sol_t[i+1] - Sol_t[i])*Sol_u[i+1][idx_inc]
             end
             # Incidence per 100000
-            Incid = sum(out)*100000/integrator.p[11]
+            Incid = sum(out)*100000/totPopSize[l,]
             # Activating incidence trigger at location l given the incidence
             sel += sum(integrator.p[12] .<= Incid) *5^(l-1)
 
