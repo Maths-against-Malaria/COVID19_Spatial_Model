@@ -1,9 +1,9 @@
 #=
 General model: Model parameterized for two locations (Schleswig-Holstein & Saxony)
 - Julia version: 1.6.1
-- Authors: Kristan A. Schneider, H. Christian T. Obama, Nessma Adil M. Y.
+- Authors: Kristan A. Schneider, H. Christian Jr. Tsoungui Obama, Nessma Adil M. Y.
 - Date created: 2021-09-06
-- Date last modified: 2022-02-09
+- Date last modified: 2022-20-10
 =#
 
 using Pkg
@@ -34,11 +34,11 @@ PopSize =[129579   400794  1498110  909046;   # Schleswig Holstein
           180370   533194  1970270  1401510]  # Saxony
 
 # Total Population size
-N = sum(PopSize) 
+N = sum(PopSize)
 
 # Initial infections vector of length r
 ininf=[[ 0. ; 0. ; 0.5 ; 0.],
-       [ 0. ; 0. ; 0.5 ; 0.]]  
+       [ 0. ; 0. ; 0.5 ; 0.]]
 
 # Erlang states
 nE = [5 5 5; 5 5 5; 5 5 5; 5 5 5]  # Matrix of latent Erlang states per age group (row) and viral variant (col)
@@ -63,21 +63,21 @@ tR0max = 300.0                    # Time at which the seasonal fluctuation of R0
 Amp    = 0.43                     # Seasonal amplitude
 lamex  = [1.0  1.3]               # External force of infection (this will be split to the age groups in the respective locations according to their contact behavior)
 
-# Time each viral variant was introduced in each location rxM matrix 
+# Time each viral variant was introduced in each location rxM matrix
 mutint = [-20 290 475 ; -20 290 475]
 
 # Severity of infection
 ## Fraction of sick individuals per age group (row) and viral variant (col) sxM Matrix
-fsick = [0.15 0.15 0.15; 0.30 0.30 0.30; 0.65 0.65 0.65; 0.7 0.7 0.7] 
+fsick = [0.15 0.15 0.15; 0.30 0.30 0.30; 0.65 0.65 0.65; 0.7 0.7 0.7]
 
 ## Fraction of partially immunized sick individuals per age group (row) and viral variant (col) sxM Matrix
 fsickPI = [[0.10 0.11 0.10; 0.11 0.12 0.11; 0.12 0.13 0.12 ],
            [0.25 0.22 0.25; 0.26 0.23 0.26; 0.27 0.24 0.27 ],
            [0.55 0.60 0.55; 0.56 0.61 0.56; 0.57 0.62 0.57 ],
-           [0.60 0.60 0.60; 0.60 0.60 0.60; 0.60 0.60 0.60 ]] 
+           [0.60 0.60 0.60; 0.60 0.60 0.60; 0.60 0.60 0.60 ]]
 
 ## Fraction of dead individuals per age group (row) and viral variant (col) sxM Matrix
-fdead = [0.0001 0.0002 0.0004; 0.0001 0.0002 0.0004; 0.0010 0.0011 0.0012; 0.24 0.24 0.24] 
+fdead = [0.0001 0.0002 0.0004; 0.0001 0.0002 0.0004; 0.0010 0.0011 0.0012; 0.24 0.24 0.24]
 
 ## Fraction of dead partially immunized individuals per age group (vector-element): entry is MxV Matrices per viral variant (row) and vaccine (col))
 fdeadPI = [[0.0        0.0      0.0     ; 0.0       0.0      0.0     ;0.0        0.0      0.00],
@@ -124,7 +124,7 @@ Dvax5= [[ 1  170  220  140 ; 1  170  220  140 ],
         [ 1  1    240  400 ; 1  1    240  400]]
 
 ## Vector of waiting times for vaccination
-Dvaxlist = [Dvax1, Dvax2, Dvax3, Dvax4, Dvax5, Dvax5] 
+Dvaxlist = [Dvax1, Dvax2, Dvax3, Dvax4, Dvax5, Dvax5]
 
 ## Times vaccination rates change corresponding to matrices Dvax1, ...,Dvax5
 tvaxchange = [360, 400, 430, 490, 590]
@@ -142,7 +142,7 @@ f= [[0.25 0.7 0.05;  0. 0.5 0.5;  0. 0.5 0.5;  0. 0.5 0.5;  0. 0.5 0.5],
 DA = [30 50 15; 30 50 15; 30 50 15; 30 50 15]
 
 # Vaccine protection from variants (MxV Matrix with viral variants (row), vaccine (col)
-g = [0.66 0.66 0.66; 0.70 0.70 0.70; 0.70 0.70 0.70] 
+g = [0.66 0.66 0.66; 0.70 0.70 0.70; 0.70 0.70 0.70]
 h = [0.0  0.0  0.0 ; 0.0  0.0  0.0 ; 0.0  0.0  0.0]
 
 ## Effect of partial immunity on transmission
@@ -211,7 +211,7 @@ t15  = tmax   # End of simulation
 tschool = [501 537; 866 904; 1100 1150]
 
 ## Time Emergency Break (EB) starts
-tEB = t10 
+tEB = t10
 
 ## Time emergency break ends
 tEBstop = t11
@@ -289,41 +289,41 @@ ContRedIndl2 =  [   0.00  0.00  0.50  0.10  0.00  0.10;
 
 # Contact behavior (case of Schleswig-Holstein & Saxony)
 ## Contacts at home
-XHome = [[57182.980566158    43021.4787255984   224322.150383509   7446.1535646188;  
+XHome = [[57182.980566158    43021.4787255984   224322.150383509   7446.1535646188;
           43021.4787255984   379370.801549785   624597.388617006   26625.2175224807;
           224322.150383509   624597.388617006   1776834.58696149   118774.7602034845;
           7446.1535646188    26625.2175224807   118774.7602034845  0.0],                # SH
-         [79596.9578768004   59670.1545553057   316718.948302366   10879.2828759017; 
+         [79596.9578768004   59670.1545553057   316718.948302366   10879.2828759017;
           59670.1545553057   498783.452279101   857476.742458246   37149.740100271;
           316718.948302366   857476.742458246   2300267.00642317   167112.764198724;
           10879.2828759017   37149.740100271    167112.764198724   0.0]]                 # Sax
 
 ## Contacts at home for elderlies (60+ years)
-XHomeOld = [[0.0   0.0   0.0                0.0; 
+XHomeOld = [[0.0   0.0   0.0                0.0;
              0.0   0.0   0.0                0.0;
              0.0   0.0   0.0                118774.7602034845;
              0.0   0.0   118774.7602034845  596735.273075845],  # SH
-            [0.0   0.0   0.0                0.0; 
+            [0.0   0.0   0.0                0.0;
              0.0   0.0   0.0                0.0;
              0.0   0.0   0.0                167112.764198724;
              0.0   0.0   167112.764198724   929687.783717516]]  # Sax
 
 ## Contacts at other places
-XOthers = [[66995.5203024599   42793.7453631786   169869.314815012   48051.0137233581; 
+XOthers = [[66995.5203024599   42793.7453631786   169869.314815012   48051.0137233581;
             42793.7453631786   554486.415402645   431019.891346432   87809.1926752048;
             169869.314815012   431019.891346432   2721693.85772205   364259.230987248;
             48051.0137233581   87809.1926752048   364259.230987248   0.0],               # SH
-           [93255.712707728    58506.6810461036   225611.786474497   71708.4624301757; 
+           [93255.712707728    58506.6810461036   225611.786474497   71708.4624301757;
             58506.6810461036   720841.254898603   558368.007685395   128927.44601176;
             225611.786474497   558368.007685395   3590070.11109356   508889.14474428;
             71708.4624301757   128927.44601176    508889.14474428    0.0]]                # Sax
 
 ## Contacts at other places for elderlies (60+ years)
-XOthersOld = [[0.0   0.0   0.0                0.0; 
+XOthersOld = [[0.0   0.0   0.0                0.0;
                0.0   0.0   0.0                0.0;
                0.0   0.0   0.0                364259.230987248;
                0.0   0.0   364259.230987248   623116.499388776],  # SH
-              [0.0   0.0   0.0                0.0; 
+              [0.0   0.0   0.0                0.0;
                0.0   0.0   0.0                0.0;
                0.0   0.0   0.0                508889.14474428;
                0.0   0.0   508889.14474428    938471.397922117]   # Sax
@@ -344,7 +344,7 @@ XWork = [[0.0                    0.0                0.0                1.6932158
           0.0                    94714.980163013    200768.524913529   729.622036802347;
           0.0                    200768.524913529   4779074.03812527   24296.6296756034;
           1.69321587350173e-37   729.622036802347   24296.6296756034   252.854648862366],       # SH
-         [0.0                    0.0                0.0                2.35690464584158e-37; 
+         [0.0                    0.0                0.0                2.35690464584158e-37;
           0.0                    113681.13069066    249481.133139123   912.003442533374;
           0.0                    249481.133139123   6451490.20291225   33713.5321437912;
           2.35690464584158e-37   912.003442533374   33713.5321437912   372.325133342623]]       # Sax
@@ -494,17 +494,17 @@ nEPI  = nEP + nI
 nEPIL = nEPI + nL
 
 # Number of infected, dead, and recoverd compartments per age
-CnumInf = sum(nEPIL .*(2*(V+1)).+2,dims=2)  
+CnumInf = sum(nEPIL .*(2*(V+1)).+2,dims=2)
 
 # Total Number of compartments per age
-Cnum = sum(nEPIL .*(2*(V+1)).+2,dims=2) .+(3*V+2) 
+Cnum = sum(nEPIL .*(2*(V+1)).+2,dims=2) .+(3*V+2)
 
 # Erl[s+1] number of compartments for each location
-Erl = accumulate(+,[0 transpose(Cnum)]) 
+Erl = accumulate(+,[0 transpose(Cnum)])
 
 # Matrix with indices of S(U) per age group (row) per loction (col)
 IndSU = repeat(transpose(collect(0:(r-1))).*Erl[s+1],outer=(s,1))
-IndSU = IndSU .+ repeat(Erl[1:s].+1,outer=(1,r)) 
+IndSU = IndSU .+ repeat(Erl[1:s].+1,outer=(1,r))
 
 # Index where the first Erlang states start
 Erl1 = accumulate(+,[0 transpose(Cnum)])[1:s] .+(3*V+3)
@@ -545,17 +545,17 @@ R0new = zeros(M)
 
 for m = 1:M
     # Total number of states for variant m
-    nstat = nE[:,m]+nP[:,m]+nI[:,m]+nL[:,m]  
+    nstat = nE[:,m]+nP[:,m]+nI[:,m]+nL[:,m]
     nstat2 = accumulate(+, nstat)
     nstat1 = accumulate(+, vcat(0,nstat)).+1
     numstates = sum(nstat)
     dimV = numstates*r
 
     # Matrix V (transition rates)
-    dV = zeros((dimV,dimV)) 
+    dV = zeros((dimV,dimV))
 
     # Matrix F (new infections)
-    dF = zeros((dimV,dimV)) 
+    dF = zeros((dimV,dimV))
     for l = 1:r
         for a = 1:s
             ind1 = (l-1)*numstates + nstat1[a]
@@ -617,8 +617,8 @@ IndRInf = Array{Int32}(undef, (s, M, r))
 INDvec = Array{Union{Missing, Any}}(missing, r)
 
 # Vector of indices for the prodromal, fully infectious, and late infectious indivisuals, respectively
-INDvecP = Array{Union{Missing, Any}}(missing, r) 
-INDvecI = Array{Union{Missing, Any}}(missing, r) 
+INDvecP = Array{Union{Missing, Any}}(missing, r)
+INDvecI = Array{Union{Missing, Any}}(missing, r)
 INDvecL = Array{Union{Missing, Any}}(missing, r)
 
 for l = 1:r
@@ -667,7 +667,7 @@ for l = 1:r
             indcompP[1] =  pickP # Indices of the unvaccinated prodromals PU.
             indcompI[1] =  pickI # Indices of the unvaccinated fully infectious IU.
             indcompL[1] =  pickL # Indices of the the unvaccinated late infectious LU.
-            
+
             for v in 2:(2*V+2)
                 indcompabc = Array{Union{Missing, Any}}(missing, 3)
                 indcompabc[1] = pick0 .+ (v-1) .* (nEPIL[a,m])
@@ -712,8 +712,8 @@ for l = 1:r
     IndE1[l] = indE1l
     IndLnL[l] = indLnLl
 
-    INDvecP[l] = indP  
-    INDvecI[l] = indI  
+    INDvecP[l] = indP
+    INDvecI[l] = indI
     INDvecL[l] = indL
 end
 
@@ -723,7 +723,7 @@ for v = 1:V
     for a = 1:s
         for m = 1:M
             # Transtition rates for latent, prodromal, fully infectious, and late infectious individuals respectively.
-            afE = repeat(transpose(f[v][2,:] ./DA[a,v]),outer=(nE[a,m],1)) 
+            afE = repeat(transpose(f[v][2,:] ./DA[a,v]),outer=(nE[a,m],1))
             afP = repeat(transpose(f[v][3,:] ./DA[a,v]),outer=(nP[a,m],1))
             afI = repeat(transpose(f[v][4,:] ./DA[a,v]),outer=(nI[a,m],1))
             afL = repeat(transpose(f[v][5,:] ./DA[a,v]),outer=(nL[a,m],1))
@@ -753,7 +753,8 @@ thres = 1:1.:tmax                                              # Callback incide
 pars = [N, g, h, R0new,  Amp, tR0max]
 plam = [INDInf]                                                # Parameters for the force of infection
 Idx_Incd = IndRInf[s,M,r]+1
-p = [IND, RATES, pars, [Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop, tEB2, tEBstop2], INDInf, lamexmat, thres, Idx_Incd, r, X, N, Incid_Trig, tschool, mutint,[pPmv,pImv,pLmv], PopSize]
+ciso = [fiso,tiso1,tiso2]                                      # Parameters for case isolation
+p = [IND, RATES, pars, [Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop, tEB2, tEBstop2], INDInf, lamexmat, thres, Idx_Incd, r, X, N, Incid_Trig, tschool, mutint,[pPmv,pImv,pLmv], PopSize,ciso]
 
 
 ##########################################################################
@@ -761,7 +762,9 @@ p = [IND, RATES, pars, [Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop, tEB2, t
 ##########################################################################
 
 ## The force of infection
-function lambda(u,INDInf,Qmax,fiso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamexmat,t,mutint,pPmv,pImv,pLmv, mutinttimes)
+function lambda(u,INDInf,Qmax,ciso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamexmat,t,mutint,pPmv,pImv,pLmv, mutinttimes)
+
+    fiso, tiso1, tiso2 = ciso
 
     EffInf=Array{Float32}(undef, (r*s,M)) # Effective number of infectious individuals per location age group and mutation
 
@@ -794,7 +797,7 @@ function lambda(u,INDInf,Qmax,fiso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamexmat
               IsickPI = 0
               Lsick = 0
               LsickPI = 0
-            
+
               for v=1:(V+1) # Individuals waiting to be vaccinated (U)  and vaccinated with pending outcome (V)
                   Psum = Psum + sum(u[INDvecP[l][a][m][v]])
                   Isum = Isum + sum(u[INDvecI[l][a][m][v]])
@@ -835,20 +838,37 @@ function lambda(u,INDInf,Qmax,fiso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamexmat
               Q = Q + Isick + IsickPI + Lsick + LsickPI # sum of symptomatic individuals going to islolation
             end
         end
-        Q = Q * fiso[l]
-        is = min(Qmax[l]/Q,1)
-        for a = 1:s
-            for m = 1 : M
-                tmp = (phome + is * (1-phome))* fiso[l] 
-                a1 = sum(pPmv[m,:] .* PsumPIv[l,a,m,:])  
-                a1 = betaP[a,m] * (PsumU[l,a,m] + a1)
-                a2  = sum((1 .- fsickPI[a][m,:] .* tmp) .* pImv[m,:] .* IsumPIv[l,a,m,:]) 
-                a2  = betaI[a,m] * (IsumU[l,a,m] - tmp * IsickU[l,a,m] + a2)
-                a3  = sum((1 .- fsickPI[a][m,:] .* tmp).* pLmv[m,:] .* LsumPIv[l,a,m,:])
-                a3 = betaL[a,m] * (LsumU[l,a,m] - tmp * LsickU[l,a,m] + a3)
-                EffInf[(l-1)*s+a,m] = a1 + a2 + a3
 
-            end
+        if tiso1[l] < t < tiso2[l]
+                caseiso = fiso[l]
+                Q = Q * fiso[l]
+                is = min(Qmax[l]/Q,1)
+                for a = 1:s
+                    for m = 1 : M
+                        tmp = (phome + is * (1-phome))* fiso[l]
+                        a1 = sum(pPmv[m,:] .* PsumPIv[l,a,m,:])
+                        a1 = betaP[a,m] * (PsumU[l,a,m] + a1)
+                        a2  = sum((1 .- fsickPI[a][m,:] .* tmp) .* pImv[m,:] .* IsumPIv[l,a,m,:])
+                        a2  = betaI[a,m] * (IsumU[l,a,m] - tmp * IsickU[l,a,m] + a2)
+                        a3  = sum((1 .- fsickPI[a][m,:] .* tmp).* pLmv[m,:] .* LsumPIv[l,a,m,:])
+                        a3 = betaL[a,m] * (LsumU[l,a,m] - tmp * LsickU[l,a,m] + a3)
+                        EffInf[(l-1)*s+a,m] = a1 + a2 + a3
+
+                    end
+                end
+        else
+                for a = 1:s
+                    for m = 1 : M
+                        a1 = sum(pPmv[m,:] .* PsumPIv[l,a,m,:])
+                        a1 = betaP[a,m] * (PsumU[l,a,m] + a1)
+                        a2  = sum( pImv[m,:] .* IsumPIv[l,a,m,:])
+                        a2  = betaI[a,m] * (IsumU[l,a,m] + a2)
+                        a3  = sum(pLmv[m,:] .* LsumPIv[l,a,m,:])
+                        a3 = betaL[a,m] * (LsumU[l,a,m] + a3)
+                        EffInf[(l-1)*s+a,m] = a1 + a2 + a3
+
+                    end
+                end
         end
     end
 
@@ -879,13 +899,14 @@ function spatialmodel(du,u,p,t)
     N, g, h, R0new, Amp, tR0max = p[3]
     Xmat, XmatEB, XmatNoSch, conttime, tEB, tEBstop,tEB2, tEBstop2 = p[4]
     INDInf = p[5]
-    X = p[10]  
+    X = p[10]
     mutint = p[14]
-    pPmv,pImv,pLmv = p[15]  
+    pPmv,pImv,pLmv = p[15]
     vrates = vaxrates[sum(vaxtime .< t)+1]
     lamex = p[6]
+    ciso = p[17]
 
-    lam = lambda(u,INDInf,Qmax,fiso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamex,t,mutint,pPmv,pImv,pLmv, mutinttimes)/N
+    lam = lambda(u,INDInf,Qmax,ciso,betaP,betaI,betaL,R0new,Amp,X,tR0max,lamex,t,mutint,pPmv,pImv,pLmv, mutinttimes)/N
     for l = 1:r
         u[IndRInf[s,M,r]+1+l] = 0
         for a = 1:s
@@ -971,9 +992,9 @@ function contact_reduction_affect!(integrator)
     idx_orig  = integrator.p[8]
     xmatr     = integrator.p[4]
     tschool   = integrator.p[13]
-    tEB       = integrator.p[4][5] 
+    tEB       = integrator.p[4][5]
     tEBstop   = integrator.p[4][6]
-    tEBstop2  = integrator.p[4][7] 
+    tEBstop2  = integrator.p[4][7]
     tEBstop2  = integrator.p[4][8]
     totPopSize = sum(integrator.p[16], dims=2)
     if !(tEB <= Cur_t <= tEBstop || tEB2 <= Cur_t <= tEBstop2)
@@ -985,8 +1006,8 @@ function contact_reduction_affect!(integrator)
         else
             xmatr1=xmatr[2]
         end
-        k1 = sum(Sol_t .<= (Cur_t-7))   
-        k2 = sum(Sol_t .<= Cur_t)      
+        k1 = sum(Sol_t .<= (Cur_t-7))
+        k2 = sum(Sol_t .<= Cur_t)
         sel = 1
         for l in 1:integrator.p[9]
             idx_inc = idx_orig+l
@@ -1314,7 +1335,7 @@ for t in 1:tmx
 end
 
 ############################################################################
-###### Saving the outputs as a dataframe 
+###### Saving the outputs as a dataframe
 ######
 ###### outt:       Time points
 ###### outInc2l1:  7-day average incidence in location l1
